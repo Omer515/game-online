@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Games-Online</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" />
+  <meta name="theme-color" content="#0b0b0f" />
+  <style>
+    :root {
+      --bg: #0b0b0f;
+      --text: #eaeaf0;
+      --muted: #9aa0a6;
+      --blue: #1565c0;
+      --red: #e53935;
+      --yellow: #f2b705;
+      --card: #101218;
+      --shadow: 0 12px 40px rgba(0,0,0,.45);
+      --gaming-purple: #8b5cf6;
+      --gaming-cyan: #06b6d4;
+      --gaming-pink: #ec4899;
+    }
+
+    * { box-sizing: border-box }
+    html, body { 
+      height: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Kufi Arabic", "Noto Sans Arabic", Arial, sans-serif;
+      background: linear-gradient(135deg, #0a0a0f 0%, #1a0f2e 25%, #0f1419 50%, #2d1b69 75%, #0b0b0f 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      scroll-behavior: smooth;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    /* خلفية الجسيمات المتحركة */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+      animation: float 20s ease-in-out infinite;
+      pointer-events: none;
+      z-index: -2;
+    }
+
+    /* نجوم متحركة */
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.3), transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(139, 92, 246, 0.4), transparent),
+        radial-gradient(1px 1px at 90px 40px, rgba(6, 182, 212, 0.3), transparent),
+        radial-gradient(1px 1px at 130px 80px, rgba(236, 72, 153, 0.3), transparent),
+        radial-gradient(2px 2px at 160px 30px, rgba(255,255,255,0.2), transparent);
+      background-repeat: repeat;
+      background-size: 200px 100px;
+      animation: sparkle 25s linear infinite;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50% }
+      50% { background-position: 100% 50% }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg) }
+      33% { transform: translateY(-30px) rotate(120deg) }
+      66% { transform: translateY(15px) rotate(240deg) }
+    }
+
+    @keyframes sparkle {
+      0% { transform: translateX(-200px) }
+      100% { transform: translateX(calc(100vw + 200px)) }
+    }
+
+    .container { 
+      width: 100%; 
+      max-width: 680px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card {
+      background: linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 28px;
+      padding: 28px 20px 24px;
+      box-shadow: 
+        var(--shadow),
+        0 0 40px rgba(139, 92, 246, 0.15),
+        inset 0 1px 0 rgba(255,255,255,.1);
+      backdrop-filter: blur(20px) saturate(180%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* تأثير الوهج الداخلي */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, 
+        rgba(139, 92, 246, 0.05) 0%, 
+        transparent 25%, 
+        rgba(6, 182, 212, 0.05) 50%, 
+        transparent 75%, 
+        rgba(236, 72, 153, 0.05) 100%);
+      border-radius: 28px;
+      pointer-events: none;
+    }
+
+    header { text-align: center; padding: 6px 0 18px; position: relative; z-index: 2; }
+
+    .avatar {
+      width: 132px; 
+      height: 132px; 
+      border-radius: 999px; 
+      object-fit: cover;
+      display: block; 
+      border: 4px solid transparent;
+      background: linear-gradient(45deg, var(--gaming-purple), var(--gaming-cyan), var(--gaming-pink)) border-box;
+      background-clip: padding-box;
+      box-shadow: 
+        0 8px 32px rgba(139, 92, 246, 0.4),
+        0 0 20px rgba(6, 182, 212, 0.3),
+        inset 0 0 0 4px #0e0f14;
+      margin: 0 auto;
+      animation: avatarGlow 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes avatarGlow {
+      0% { 
+        box-shadow: 
+          0 8px 32px rgba(139, 92, 246, 0.4),
+          0 0 20px rgba(6, 182, 212, 0.3),
+          inset 0 0 0 4px #0e0f14;
+      }
+      100% { 
+        box-shadow: 
+          0 8px 40px rgba(139, 92, 246, 0.6),
+          0 0 30px rgba(236, 72, 153, 0.4),
+          inset 0 0 0 4px #0e0f14;
+      }
+    }
+
+    .brand { 
+      font-weight: 800; 
+      letter-spacing: .4px; 
+      margin-top: 14px;
+      text-shadow: 0 0 20px rgba(255, 69, 0, 0.5);
+      font-size: 28px;
+    }
+    .brand .g1 { color: #FF0000; text-shadow: 0 0 15px currentColor; } /* أحمر قوي */
+    .brand .a { color: #FFA500; text-shadow: 0 0 15px currentColor; } /* أصفر برتقالي */
+    .brand .m1 { color: #FFA500; text-shadow: 0 0 15px currentColor; } /* أصفر برتقالي */
+    .brand .m2 { color: #FFA500; text-shadow: 0 0 15px currentColor; } /* أصفر برتقالي */
+    .brand .e { color: #FF0000; text-shadow: 0 0 15px currentColor; } /* أحمر قوي */
+    .brand .s { color: #FF0000; text-shadow: 0 0 15px currentColor; } /* أحمر قوي */
+    .brand .online { color: #0080FF; text-shadow: 0 0 15px currentColor; } /* أزرق */
+
+    .bio { color: var(--muted); font-size: 14px; margin-top: 6px }
+
+    .links { display: grid; gap: 14px; margin-top: 18px; position: relative; z-index: 2; }
+
+    .link-btn {
+      position: relative;
+      display: grid; 
+      grid-template-columns: 50px 1fr auto; 
+      align-items: center; 
+      gap: 12px;
+      width: 100%;
+      padding: 14px 16px; 
+      border-radius: 16px;
+      background: linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+      border: 1px solid rgba(255,255,255,.12);
+      color: var(--text); 
+      text-decoration: none; 
+      font-weight: 700;
+      box-shadow: 
+        0 10px 25px rgba(0,0,0,.30),
+        inset 0 1px 0 rgba(255,255,255,.1);
+      transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+    }
+
+    .link-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.1), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .link-btn:hover::before {
+      left: 100%;
+    }
+
+    .link-btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 
+        0 20px 40px rgba(0,0,0,.35),
+        0 0 30px rgba(139, 92, 246, 0.2),
+        inset 0 1px 0 rgba(255,255,255,.15);
+      border-color: rgba(255,255,255,.2);
+    }
+
+    .link-btn:active { 
+      transform: translateY(-1px) scale(0.98);
+      transition: all 0.1s ease;
+    }
+
+    .icon {
+      width: 46px; 
+      height: 46px; 
+      border-radius: 14px; 
+      display: grid; 
+      place-items: center;
+      background: linear-gradient(145deg, rgba(255,255,255,.12), rgba(255,255,255,.04));
+      border: 1px solid rgba(255,255,255,.15);
+      box-shadow: 0 4px 12px rgba(0,0,0,.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .icon::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: radial-gradient(circle, rgba(255,255,255,.2), transparent);
+      transition: all 0.3s ease;
+      border-radius: 50%;
+    }
+
+    .link-btn:hover .icon::after {
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      border-radius: 14px;
+    }
+
+    .icon i { 
+      font-size: 22px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .instagram { --brand: linear-gradient(45deg,#f9ce34,#ee2a7b,#6228d7) }
+    .whatsapp  { --brand: #25D366 }
+    .facebook  { --brand: #1877F2 }
+    .threads   { --brand: #000 }
+    .location  { --brand: #ff6d00 }
+
+    .link-btn .badge {
+      font-size: 12px; 
+      font-weight: 800; 
+      opacity: .85; 
+      padding: 6px 10px; 
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.08);
+      backdrop-filter: blur(10px);
+    }
+
+    footer { 
+      text-align: center; 
+      font-size: 12.5px; 
+      color: var(--muted); 
+      margin-top: 18px;
+      position: relative;
+      z-index: 2;
+    }
+    footer a { color: #9bbcff; text-decoration: none }
+
+    @media (max-width: 480px) {
+      .link-btn { grid-template-columns: 44px 1fr auto; padding: 13px 14px }
+      .icon { width: 44px; height: 44px; border-radius: 12px }
+      .icon i { font-size: 20px }
+    }
+
+    /* تأثيرات إضافية للألعاب */
+    .gaming-particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .particle {
+      position: absolute;
+      background: linear-gradient(45deg, var(--gaming-purple), var(--gaming-cyan));
+      border-radius: 50%;
+      animation: particleFloat 15s linear infinite;
+    }
+
+    @keyframes particleFloat {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <!-- جسيمات متحركة -->
+  <div class="gaming-particles" id="particles"></div>
+
+  <main class="container">
+    <section class="card">
+      <header>
+        <!-- ضع رابط صورتك هنا -->
+        <img class="avatar" src="game.jpg" alt="صورة البروفايل" />
+        <h1 class="brand" aria-label="Games Online">
+          <span class="g1">G</span><span class="a">A</span><span class="m1">M</span><span class="e">E</span><span class="s">S</span>
+          <span class="online"> ONLINE</span>
+        </h1>
+      </header>
+      
+      <div class="links">
+        <a class="link-btn instagram" href="https://www.instagram.com/n1onlen?igsh=Ym80bDNrYjE5bGMz" target="_blank" rel="noopener">
+          <span class="icon" style="background: var(--brand)"><i class="fa-brands fa-instagram"></i></span>
+          <span>Instagram – إنستغرام</span>
+          <span class="badge">رسمي</span>
+        </a>
+
+        <a class="link-btn whatsapp" href="https://wa.me/+9640782 449 8644" target="_blank" rel="noopener">
+          <span class="icon"><i class="fa-brands fa-whatsapp" style="color: var(--brand)"></i></span>
+          <span>WhatsApp – واتساب</span>
+          <span class="badge">دردشة</span>
+        </a>
+
+        <a class="link-btn facebook" href="https://www.facebook.com/share/1BWNa596gD/" target="_blank" rel="noopener">
+          <span class="icon"><i class="fa-brands fa-facebook-f" style="color: var(--brand)"></i></span>
+          <span>Facebook – فيسبوك</span>
+          <span class="badge">صفحة</span>
+        </a>
+
+        <a class="link-btn threads" href="https://www.threads.com/@n1onlen" target="_blank" rel="noopener">
+          <span class="icon"><i class="fa-brands fa-threads" style="color: var(--text)"></i></span>
+          <span>Threads – ثريدز</span>
+          <span class="badge">من ميتا</span>
+        </a>
+
+        <a class="link-btn location" href="https://maps.app.goo.gl/hBBBYvtsdcwch3xMA" target="_blank" rel="noopener">
+          <span class="icon"><i class="fa-solid fa-location-dot" style="color: var(--brand)"></i></span>
+          <span>الموقع الجغرافي للمحل</span>
+          <span class="badge">Google Maps</span>
+        </a>
+      </div>
+
+      <footer>
+        © <span id="year"></span> Games Online
+      </footer>
+    </section>
+  </main>
+
+  <script>
+    // تحديث السنة
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // إنشاء الجسيمات المتحركة
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      
+      setInterval(() => {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        
+        // حجم وموضع عشوائي
+        const size = Math.random() * 4 + 2;
+        particle.style.width = size + 'px';
+        particle.style.height = size + 'px';
+        particle.style.left = Math.random() * 100 + '%';
+        
+        // مدة حياة عشوائية
+        const duration = Math.random() * 10 + 10;
+        particle.style.animationDuration = duration + 's';
+        
+        particlesContainer.appendChild(particle);
+        
+        // حذف الجسيم بعد انتهاء الحركة
+        setTimeout(() => {
+          particle.remove();
+        }, duration * 1000);
+        
+      }, 300);
+    }
+
+    // بدء إنشاء الجسيمات
+    createParticles();
+
+    // تأثيرات إضافية عند المرور على الروابط
+    document.querySelectorAll('.link-btn').forEach(btn => {
+      btn.addEventListener('mouseenter', function() {
+        this.style.setProperty('--shadow-color', getComputedStyle(this).getPropertyValue('--brand'));
+      });
+    });
+  </script>
+</body>
+</html>
